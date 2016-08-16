@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">@color/md_teal_500</color>
+    <color name="primary_dark">@color/md_teal_700</color>
+    <color name="primary_light">@color/md_teal_100</color>
+    <color name="accent">@color/md_deep_orange_500</color>
+    <color name="primary_text">@color/md_grey_900</color>
+    <color name="secondary_text">@color/md_grey_600</color>
+    <color name="icons">@color/md_white_1000</color>
+    <color name="divider">@color/md_grey_400</color>
+
+    <color name="translucent_scrim_top">#26000000</color>
+    <color name="translucent_scrim_top_center">#0C000000</color>
+    <color name="translucent_scrim_bottom">#8a000000</color>
+    <color name="translucent_scrim_bottom_center">#4D000000</color>
+</resources>

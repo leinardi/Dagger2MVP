@@ -12,6 +12,12 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "API_URL", PIXABAY_URL
+        buildConfigField "String", "API_KEY", PIXABAY_API_KEY
+    }
+
+    if(PIXABAY_API_KEY.equals('"<YOUR KEY HERE>"')){
+        throw new InvalidUserDataException("You need to provide a valid Pixabay API key")
     }
 
     compileOptions {
@@ -36,16 +42,12 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField "String", "API_URL", '"https://pixabay.com"'
-            buildConfigField "String", "API_KEY", '"<YOUR KEY HERE>"'
             applicationIdSuffix '.dev'
             versionNameSuffix '-dev'
             debuggable true
             signingConfig signingConfigs.debug
         }
         release {
-            buildConfigField "String", "API_URL", '"https://pixabay.com"'
-            buildConfigField "String", "API_KEY", '"<YOUR KEY HERE>"'
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release

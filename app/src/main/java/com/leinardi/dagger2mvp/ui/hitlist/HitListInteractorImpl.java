@@ -6,6 +6,7 @@ import com.leinardi.dagger2mvp.network.retrofit.PixabayServer;
 import javax.inject.Inject;
 
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -18,7 +19,7 @@ public class HitListInteractorImpl implements HitListInteractor {
 
     private PixabayServer pixabayServer;
 
-    private boolean isCanceled;
+    private Subscription subscription;
 
     @Inject
     public HitListInteractorImpl(PixabayServer pixabayServer) {
@@ -27,19 +28,21 @@ public class HitListInteractorImpl implements HitListInteractor {
 
     @Override
     public void cancel() {
-        isCanceled = true;
+        if (subscription != null && !subscription.isUnsubscribed()) {
+            subscription.unsubscribe();
+        }
     }
 
     @Override
     public void reset() {
-        isCanceled = false;
+        cancel();
     }
 
     @Override
     public void loadhitList(final HitListListener hitListListener) {
         reset();
-        pixabayServer.getData()
-                .subscribeOn(Schedulers.newThread())
+        subscription = pixabayServer.getData()
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Hits>() {
                     @Override
@@ -49,16 +52,12 @@ public class HitListInteractorImpl implements HitListInteractor {
 
                     @Override
                     public void onError(Throwable e) {
-                        if (!isCanceled) {
-                            hitListListener.onFailure(e.getMessage());
-                        }
+                        hitListListener.onFailure(e.getMessage());
                     }
 
                     @Override
                     public void onNext(Hits hits) {
-                        if (!isCanceled) {
-                            hitListListener.onSuccess(hits);
-                        }
+                        hitListListener.onSuccess(hits);
                     }
                 });
     }
